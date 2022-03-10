@@ -120,6 +120,33 @@ To define another port than the default (5000), you can do:
     serve(app, port=<port>)
 ```
 
+**Certificate Handler**
+
+Sometimes it is necessary for microservices to access certificates from
+the file system of the server they are hosted on at runtime.
+Microservices that run inside docker containers cannot by default
+access file systems outside their container.
+
+By first storing the relevant certificate in a Sesam secret and passing
+it to a docker environment variable in the microservice system config,
+this module allows you to install the certificate in the container at runtime.
+
+Assuming the microservice system config in Sesam is defined with the
+environment variable `CERT` referencing a Sesam secret containing the
+relevant certificate, the following example shows how to install
+the certificate inside the container at runtime:
+
+```python
+from sesamutils import CertificateHandler
+from sesamutils import VariablesConfig
+
+env = VariablesConfig(["CERT"])
+
+ch = CertificateHandler(env.CERT)
+ch.write()    # write certificate to file system
+ch.install()  # install certificate to /etc/ssl/certs/
+```
+
 ### Installation
 
 ```python
