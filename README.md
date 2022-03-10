@@ -136,13 +136,13 @@ environment variable `CERT` referencing a Sesam secret containing the
 relevant certificate, the following example shows how to install
 the certificate inside the container at runtime:
 
-```
+```python
 from sesamutils import CertificateHandler
-import os
+from sesamutils import VariablesConfig
 
-cert = os.environ.get("CERT")
+env = VariablesConfig(["CERT"])
 
-ch = CertificateHandler(cert)
+ch = CertificateHandler(env.CERT)
 ch.write()    # write certificate to file system
 ch.install()  # install certificate to /etc/ssl/certs/
 ```
